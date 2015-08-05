@@ -16,7 +16,7 @@ class UserActivity:
                 now = datetime.datetime.now()
                 user_profile.last_activity=now
                 dinette_activity_at = req.session.get("dinette_activity_at", [])
-                req.session["dinette_activity_at"] = dinette_activity_at = rotate_with(dinette_activity_at, now)
+                req.session["dinette_activity_at"] = dinette_activity_at = rotate_with(dinette_activity_at, str(now))
                 user_profile.last_session_activity = dinette_activity_at[0]
                 user_profile.save()
             except:

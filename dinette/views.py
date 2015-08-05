@@ -107,22 +107,21 @@ def postTopic(request):
 
     if not topic.is_valid():
         d = {"is_valid": "false", "response_html": topic.as_table()}
-        json = json.dumps(d)
         if request.FILES:
-            json = "<textarea>"+json.dumps(d)+"</textarea>"
+            json_data = "<textarea>"+json.dumps(d)+"</textarea>"
         else:
-            json = json.dumps(d)
-        return HttpResponse(json, mimetype=json_mimetype)
+            json_data = json.dumps(d)
+        return HttpResponse(json_data, content_type=json_mimetype)
 
     #code which checks for flood control
     if (datetime.now()-request.user.dinetteuserprofile.last_posttime).seconds < settings.FLOOD_TIME:
     #oh....... user trying to flood us Stop him
         d2 = {"is_valid": "flood", "errormessage": "Flood control.................."}
         if request.FILES:
-            json = "<textarea>"+json.dumps(d2)+"</textarea>"
+            json_data = "<textarea>"+json.dumps(d2)+"</textarea>"
         else :
-            json = json.dumps(d2)
-        return HttpResponse(json, mimetype = json_mimetype)
+            json_data = json.dumps(d2)
+        return HttpResponse(json_data, content_type = json_mimetype)
 
     ftopic = topic.save(commit=False)
     #only if there is any file
@@ -154,10 +153,10 @@ def postTopic(request):
 
     #this the required for ajax file uploads
     if request.FILES :
-        json = "<textarea>"+json.dumps(d2)+"</textarea>"
+        json_data = "<textarea>"+json.dumps(d2)+"</textarea>"
     else :
-        json = json.dumps(d2)
-    return HttpResponse(json, mimetype = json_mimetype)
+        json_data = json.dumps(d2)
+    return HttpResponse(json_data, content_type=json_mimetype)
 
 @login_required
 def postReply(request):
@@ -166,12 +165,11 @@ def postReply(request):
 
     if not freply.is_valid():
         d = {"is_valid":"false","response_html":freply.as_table()}
-        json = json.dumps(d)
         if request.FILES :
-            json = "<textarea>"+json.dumps(d)+"</textarea>"
+            json_data = "<textarea>"+json.dumps(d)+"</textarea>"
         else:
-            json = json.dumps(d)
-        return HttpResponse(json, mimetype = json_mimetype)
+            json_data = json.dumps(d)
+        return HttpResponse(json_data, content_type=json_mimetype)
 
 
 
@@ -180,10 +178,10 @@ def postReply(request):
     #oh....... user trying to flood us Stop him
         d2 = {"is_valid":"flood","errormessage":"You have posted message too recently. Please wait a while before trying again."}
         if request.FILES :
-            json = "<textarea>"+json.dumps(d2)+"</textarea>"
+            json_data = "<textarea>"+json.dumps(d2)+"</textarea>"
         else :
-            json = json.dumps(d2)
-        return HttpResponse(json, mimetype = json_mimetype)
+            json_data = json.dumps(d2)
+        return HttpResponse(json_data, content_type=json_mimetype)
 
 
     reply = freply.save(commit=False)
@@ -212,11 +210,11 @@ def postReply(request):
 
     if request.FILES :
         #this the required for ajax file uploads
-        json = "<textarea>"+json.dumps(d2)+"</textarea>"
+        json_data = "<textarea>"+json.dumps(d2)+"</textarea>"
     else:
-        json = json.dumps(d2)
+        json_data = json.dumps(d2)
 
-    return HttpResponse(json, mimetype = json_mimetype)
+    return HttpResponse(json_data, content_type=json_mimetype)
 
 @login_required
 def deleteReply(request, reply_id):
@@ -229,8 +227,8 @@ def deleteReply(request, reply_id):
     except:
         resp["status"] = 0
         resp["message"] = "Error deleting message"
-    json = json.dumps(resp)
-    return HttpResponse(json, mimetype = json_mimetype)
+    json_data = json.dumps(resp)
+    return HttpResponse(json_data, content_type=json_mimetype)
 
 @login_required
 def editReply(request, reply_id):
@@ -357,7 +355,7 @@ def moderate_topic(request, topic_id, action):
         topic.save()
         payload = {'topic_id':topic.pk, 'message':message}
         resp = json.dumps(payload)
-        return HttpResponse(resp, mimetype = json_mimetype)
+        return HttpResponse(resp, content_type=json_mimetype)
     else:
         return HttpResponse('This view must be called via post')
 

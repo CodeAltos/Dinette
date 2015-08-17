@@ -4,7 +4,11 @@
 
 
 {% block content %}
-
+<style>
+	.align-top{
+		vertical-align: top !important;
+	}
+</style>
     
 <!-- brd-index begins -->
 <div id="brd-index" class="brd-page basic-page">
@@ -20,25 +24,21 @@
   </div>
   -->
   <button class='btn btn-info btn-large forum_name'>{{ forum }}</button>
-  <div class='well'>
-    <div class='forum_column_title'>
-        <span class='span6' style='margin-left: 43px;'>Forum</span>
-        <span class='span1'>Topics</span>
-        <span class='span1'>Posts</span>
-        <span class='span2'>Last Post</span>
-    <div class='clearfix'></div>
-    </div>
-
-    <div class=''>
-    {% for category in forum.category_set.all %}
-    <div class='row-div'>
-
-            <i class='icon-th left-icon'> </i>
-            <div class="item-subject span6 row-item">
-                <h4 >
-                    <!--               <span class=' icon-chevron-right ' style='inline'></span> -->
-                    <a href="{% url 'dinette_index' category.slug %}"><span> {{category}} </span></a></h4>
-                    <p>{{ category.description }}
+  <table class="table table-hover">
+  	<tr>
+  	<th>&nbsp;</th>
+  	<th class="col-md-6">Forum</th>
+  	<th class="col-md-2">Topics</th>
+  	<th class="col-md-2">Posts</th>
+  	<th class="col-md-2">Last Post</th>
+  	</tr>
+  	<tbody>
+  	{% for category in forum.category_set.all %}
+  	<tr>
+  		<td class="align-top"><h4><i class="glyphicon glyphicon-th"> </i></h4></td>
+  		<td>
+  			<h4><a href="{% url 'dinette_index' category.slug %}"><span> {{category}} </span></a></h4>
+  			<p>{{ category.description }}
                     <span class="modlist">
                         (Moderated by
                         {% for moderator in category.moderated_by.all %}
@@ -46,13 +46,11 @@
                         {% endfor %}
                         )
                     </span>
-                    </p>
-                </div>
-            <div class='span1 row-item'> {{ category.get_topics.count  }} </div>
-            <div class='span1 row-item'> {{ category.noofPosts }} </div>
-            <div class='span2 row-item'>
-
-                    {# last post can be Reply or Category #}
+            </p>
+  		</td>
+  		<td>{{ category.get_topics.count  }}</td>
+  		<td>{{ category.noofPosts }}</td>
+  		<td>{# last post can be Reply or Category #}
                     {% if category.lastPost.get_url_with_fragment %}
                         <a href={{ category.lastPost.get_url_with_fragment }}>
                     {% else %}
@@ -65,16 +63,16 @@
                             {{ category.lastPostedUser.username }}
                         </a>
                 </cite>
-            </div>
-            <div class='clearfix'></div>
-        </div>
-    {% endfor %}
-</div>
-
-  </div>
+        </td>
+    </tr>
+  	{% endfor %}
+  	</tbody>
+  </table>
+  
   <!-- category-#id ends -->
   <br>
 {% endfor %}
+  </div>
 <!-- brd-main ends -->
 
 <!-- forum_qpost -->
@@ -109,9 +107,6 @@
   <div class='clearfix'></div>
 </div>
 <!-- brd-stats ends -->
-
-
-{{ block.super }}
 
 </div><!-- brd-index ends -->
 </div><!-- brd-wrap ends -->

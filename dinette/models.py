@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import User
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.template.defaultfilters import slugify
@@ -12,6 +12,7 @@ from BeautifulSoup import BeautifulSoup
 import datetime
 from dinette.libs.postmarkup import render_bbcode
 from markupfield.fields import MarkupField
+from tendenci.apps.user_groups.models import Group
 
 class SiteConfig(models.Model):
     name = models.CharField(max_length = 100)

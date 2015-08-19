@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.contrib.syndication.views import Feed
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import User
 from django.conf import settings
 from django.contrib.auth.views import (
     login as auth_login, logout as auth_logout)
@@ -17,8 +17,9 @@ import logging
 
 import json
 
-from dinette.models import Ftopics, Category, Reply, DinetteUserProfile
+from dinette.models import Ftopics, Category, Reply, DinetteUserProfile, SuperCategory
 from dinette.forms import FtopicForm, ReplyForm
+from tendenci.apps.user_groups.models import Group, GroupMembership
 
 
 #Create module logger
@@ -30,18 +31,19 @@ json_mimetype = 'application/javascript'
 
 def index_page(request):
     #groups which this user has access
+    #we are treating user who have not loggedin belongs to general group
+    groups = Group.objects.filter(name__iexact="general")
     if request.user.is_authenticated():
-        groups = [group for group in request.user.groups.all()] + \
-            [group for group in Group.objects.filter(name="general")]
-    else:
-        #we are treating user who have not loggedin belongs to general group
-        groups = Group.objects.filter(name="general")
+        groups = [gm.group for gm in GroupMembership.objects.filter(member=request.user)] + \
+                list(groups)
+        
     #logic which decide which forum does this user have access to
     forums = []
     for group in groups:
         forums.extend([each for each in group.can_access_forums.all()])
     forums = set(forums)
     forums = sorted(forums, cmp=lambda x, y: int(y.ordering) - int(x.ordering))
+    forums = SuperCategory.objects.all()
     totaltopics = Ftopics.objects.count()
     totalposts = totaltopics + Reply.objects.count()
     totalusers = User.objects.count()

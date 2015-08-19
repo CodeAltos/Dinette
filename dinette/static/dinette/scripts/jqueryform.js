@@ -1197,4 +1197,4 @@ function log() {
     }
 }
 
-})( (typeof(jQuery) != 'undefined') ? jQuery : window.Zepto );
+})( jq110);

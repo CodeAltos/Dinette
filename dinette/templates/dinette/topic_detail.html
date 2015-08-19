@@ -170,7 +170,7 @@
   	
 	{% if not topic.is_closed %}
 	  {% if user.is_authenticated %}
-		<a href="#" onclick="return isUserAuthenticated(2)">Post Reply</a> &nbsp; &nbsp;
+		<a href="#" class="reply_link">Post Reply</a> &nbsp; &nbsp;
 	  {% else %}
 		(<a href="{% get_login_url %}?next={{ topic.get_absolute_url }}">Login to Post Reply</a>) &nbsp; &nbsp;
 	  {% endif %}
@@ -194,7 +194,7 @@
 		  <tr>
 			<th> </th>
 			<td>
-			  <input type="submit" value="Post Reply" onClick="return check_errors_in_Replyform()" />
+			  <input type="submit" id="reply_submit_btn" value="Post Reply"/>
 			  &nbsp; <span class="closebutton"> <a href="" onclick="return hideForm()">close</a>  </span>
 			</td>
 		  </tr>
@@ -209,4 +209,52 @@
 	
   {{ block.super }}
 </div>
+
+<script>
+(function($) {
+	intialize();
+	
+	$('#belowpostreplybox .reply_link').click(function() {
+		// isUserAuthenticated(2);
+    	
+	    if($('[name=authenticated]').val() == "True") {
+	        if($("#formbox").css("display") == "block") {
+	            $("#formbox").css("display","none");
+	            return false;
+	        }
+	         
+	        if( $("#fposttopic").length > 0 ) {
+	            $("#errorbox span").html(" ");
+	            $("#errorbox span").css({ padding : 0 });
+	            $("#formbox").css("display","block");
+	         }
+	         
+	        if( $("#fpostreply").length > 0 ) { 
+	            content =   $("#formbox").html();
+	            $("#formbox").remove();    
+	            $("#belowpostreplybox").after("<div id='formbox' class='magicbox well '>"+content+"</div>");
+	            $("#formbox").css("display","block");
+	            $("#errorbox span").html(" ");
+	            $("#errorbox span").css({ padding : 0 });
+	            $('#fpostreply').ajaxForm({dataType: 'json', success: formsubmission });
+	         }
+	           
+	        if( $("#fpostreply").length > 0 )  {
+	            $('#fpostreply').clearForm();
+	            $(':input:visible:enabled:first','#fpostreply').focus();
+	            return false;
+	        }
+	    }else{
+	    	document.location = "/accounts/login/?next=/forum/";    
+	    	return false; 
+	    }  
+	});
+	
+	$("#reply_submit_btn").click(function(){
+		return check_errors_in_Replyform();
+	});
+	
+})(jq110);
+
+</script>
 {% endblock %}

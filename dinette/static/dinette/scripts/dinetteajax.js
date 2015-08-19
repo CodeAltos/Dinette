@@ -1,4 +1,6 @@
-$(document).ready(intialize);
+//$(document).ready(intialize);
+
+var $ = jq110;
 
 function intialize() {
     if ( $("#fposttopic").length > 0 ) {
@@ -25,7 +27,7 @@ function intialize() {
 }
 
 function check_errors_in_form() {
-    farry =  $('#fposttopic *').fieldValue()
+    farry =  $('#fposttopic *').fieldValue();
   
     if ($.trim(farry[0]).length  <= 0) {
         window.alert("Subject field should not be empty"+farry[0]);
@@ -39,16 +41,17 @@ function check_errors_in_form() {
             
     //hide the form
     
-    $("#errorbox span").html(" <img src='/site_media/dinette/images/ajaximage.gif' alt='ajax image'/> &nbsp; posting...........  ")
+    $("#errorbox span").html(" <img src='/site_media/dinette/images/ajaximage.gif' alt='ajax image'/> &nbsp; posting...........  ");
     
      return true;
 }
 
 
 function check_errors_in_Replyform() {
-    farry =  $('#fpostreply *').fieldValue();
-    if ($.trim(farry[0]).length  <= 0) {
-        window.alert("Message should not be empty"+farry[0]);
+	fmsg = $('#fpostreply textarea#id_message').val();
+    //farry =  $('#fpostreply *').fieldValue();
+    if ($.trim(fmsg).length  <= 0) {
+        window.alert("Message should not be empty");
         return false;
     }
    
@@ -65,7 +68,7 @@ function formsubmission(data) {
             $("#topicslist").prepend(data['response_html']);
             show_hide_error_box();
             $("#errorbox span").html("Sucessfully posted the topic");
-            $("#errorbox span").css({ padding : 6 })
+            $("#errorbox span").css({ padding : 6 });
             $("#formbox").css("display","none");
         }
         else if(data["is_valid"] == "false") {
@@ -73,13 +76,13 @@ function formsubmission(data) {
             $("#formbox  table tbody").prepend(data["response_html"]);
             show_hide_error_box();
             $("#errorbox span").html("There is an error in the form.Please repost the form");
-            $("#errorbox span").css({ padding : 6 })
+            $("#errorbox span").css({ padding : 6 });
         }        
         else if(data["is_valid"] == "flood") {
             $("#formbox").css("display","none");
             show_hide_error_box();
             $("#errorbox span").html(data["errormessage"]);
-            $("#errorbox span").css({ padding : 6 })
+            $("#errorbox span").css({ padding : 6 });
         }
     }
     
@@ -88,7 +91,7 @@ function formsubmission(data) {
             $("#replies").append(data["response_html"]);
             show_hide_error_box();
             $("#errorbox span").html("Sucessfully Replied to the topic");
-            $("#errorbox span").css({ padding : 6 })
+            $("#errorbox span").css({ padding : 6 });
             $("#formbox").css("display","none");
         }
         else if(data["is_valid"] == "false") {
@@ -96,13 +99,13 @@ function formsubmission(data) {
             $("#formbox  table tbody").prepend(data["response_html"]);
             show_hide_error_box();
             $("#errorbox span").html("There is an error in the form.Please repost the form");
-            $("#errorbox span").css({ padding : 6 })
+            $("#errorbox span").css({ padding : 6 });
         }
         else if(data["is_valid"] == "flood") {
             $("#formbox").css("display","none");
             show_hide_error_box();
             $("#errorbox span").html(data["errormessage"]);
-            $("#errorbox span").css({ padding : 6 })
+            $("#errorbox span").css({ padding : 6 });
         }
    }
 }
@@ -110,7 +113,7 @@ function formsubmission(data) {
 
 function isUserAuthenticated( k )
 {
-    farry =  $('[name=authenticated]').val()     
+    farry =  $('[name=authenticated]').val();   
     
     if(farry == "True") {
         if($("#formbox").css("display") == "block") {
@@ -120,7 +123,7 @@ function isUserAuthenticated( k )
          
         if( $("#fposttopic").length > 0 ) {
             $("#errorbox span").html(" ");
-            $("#errorbox span").css({ padding : 0 })
+            $("#errorbox span").css({ padding : 0 });
             $("#formbox").css("display","block");
          }
          
@@ -170,7 +173,7 @@ function hideForm()
 
 function update_message(data){
    $("#errorbox span").html(data["message"]);
-   $("#errorbox span").css({ padding : 6 })
+   $("#errorbox span").css({ padding : 6 });
    show_hide_error_box();
    
 }
@@ -184,7 +187,7 @@ $('.moderate-post').click(function(){
    url = $(this).attr('href');
    $.post(url, {}, update_message, 'json');
    return false;
-   })
+  });
 
 function quote_reply(reply, author) {
     $("#formbox").show();
@@ -197,3 +200,4 @@ function delete_reply(reply) {
     $("#post" + reply).fadeOut();
   }, 'json');
 }
+

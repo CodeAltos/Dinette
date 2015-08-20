@@ -89,7 +89,7 @@ function formsubmission(data) {
     
     if ( $("#fpostreply").length > 0 ) {
         if(data["is_valid"] == "true") {
-            $("#replies").append(data["response_html"]);
+            $("#table-replies tbody").append(data["response_html"]);
             show_hide_error_box();
             $("#errorbox span").html("Sucessfully Replied to the topic");
             $("#errorbox span").css({ padding : 6 });

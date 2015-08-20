@@ -27,21 +27,22 @@ function intialize() {
 }
 
 function check_errors_in_form() {
-    farry =  $('#fposttopic *').fieldValue();
+    fsubject = $('#fposttopic input#id_subject').val();
+    fmsg = $('#fposttopic textarea#id_message').val();
   
-    if ($.trim(farry[0]).length  <= 0) {
-        window.alert("Subject field should not be empty"+farry[0]);
+    if ($.trim(fsubject).length  <= 0) {
+        window.alert("Subject field should not be empty");
         return false;
     }
      
-    if ($.trim(farry[1]).length <= 0) {
-        window.alert("Message field should not be empty"+farry[1]);
+    if ($.trim(fmsg).length  <= 0) {
+        window.alert("Message field should not be empty");
         return false;
     }
             
     //hide the form
     
-    $("#errorbox span").html(" <img src='/site_media/dinette/images/ajaximage.gif' alt='ajax image'/> &nbsp; posting...........  ");
+    $("#errorbox span").html(" <img src='/static/dinette/images/ajaximage.gif' alt='ajax image'/> &nbsp; posting...........  ");
     
      return true;
 }

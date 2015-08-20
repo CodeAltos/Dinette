@@ -34,8 +34,8 @@
 			<tr>
 			  <th> </th>
 			  <td>
-			    <input type="submit" value="Post Topic" onClick="return check_errors_in_form()" />
-			    &nbsp; <span class="closebutton"> <a href="" onclick="return hideForm()">close</a>  </span>
+			    <input id="topic_submit_btn" type="submit" value="Post Topic" />
+			    &nbsp; <span class="closebutton"> <a href="">close</a>  </span>
 			  </td>
 			</tr>
 		  </tbody>
@@ -61,7 +61,7 @@
 		  </span>
         
 		  {% if authenticated %}
-			<a href="#" onclick="return isUserAuthenticated(0)">New Topic</a>        
+			<a href="#" id="new_topic_link">New Topic</a>        
 		  {% else %}
 			<a href="{% get_login_url %}?next={{ category.get_absolute_url }}">Login to start New Topic</a>        
 		  {% endif %}
@@ -122,4 +122,54 @@
 	
   </div>
 </div>
+
+<script>
+(function($) {
+	intialize();
+	
+	$("#new_topic_link").click(function(){
+		if($('[name=authenticated]').val() == "True") {
+	        if($("#formbox").css("display") == "block") {
+	            $("#formbox").css("display","none");
+	            return false;
+	        }
+	         
+	        if( $("#fposttopic").length > 0 ) {
+	            $("#errorbox span").html(" ");
+	            $("#errorbox span").css({ padding : 0 });
+	            $("#formbox").css("display","block");
+	         }
+	         
+	        if( $("#fpostreply").length > 0 ) { 
+	            content =   $("#formbox").html();
+                $("#formbox").remove();    
+                $("#errorbox").after("<div id='formbox' class='magicbox well'>"+content+"</div>");
+                $("#formbox").css("display","block");
+                $("#errorbox span").html(" ");
+                $("#errorbox span").css({ padding : 0 });
+                $('#fpostreply').ajaxForm({dataType:  'json', success: formsubmission });
+	         }
+	           
+	        if ( $("#fposttopic").length > 0 ){
+	            $('#fposttopic').clearForm();        
+	            $(':input:visible:enabled:first','#fposttopic').focus();
+	            return false;
+	        }
+	    }else{
+	    	document.location = "/accounts/login/?next=/forum/";    
+	    	return false; 
+	    }  
+	});
+	
+	$("#topic_submit_btn").click(function(){
+		return check_errors_in_form();
+	});
+	
+	$(".closebutton").click(function(){
+		return hideForm();
+	});
+	
+})(jq110);
+</script>
+
 {% endblock %}

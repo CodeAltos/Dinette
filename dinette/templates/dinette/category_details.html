@@ -7,7 +7,7 @@
 
 {% block content %}
 
-{% load pagination_tags %}
+{% load bootstrap_pagination_tags %}
 {% load dinette_tags %}
 
 {% autopaginate topic_list topic_page_size %}
@@ -48,6 +48,7 @@
 	<!-- formbox ends -->
      
     <!-- brd-main begin -->
+
 	<div id="brd-main">
 	  <!-- bread crumbs begin -->
 	  <div id="brd-crumbs-top" class="crumbs well well-small">
@@ -60,57 +61,72 @@
 			<a href="{{ category.get_absolute_url }}"> {{category.name}}</a>
 		  </span>
         
+        	<span class="pull-right">
 		  {% if authenticated %}
-			<a href="#" id="new_topic_link">New Topic</a>        
+			<strong><a href="#" id="new_topic_link" class="success">Add Topic</a> </strong>      
 		  {% else %}
 			<a href="{% get_login_url %}?next={{ category.get_absolute_url }}">Login to start New Topic</a>        
 		  {% endif %}
+		  | <a href="{% url 'dinette_feed_url' category.getCategoryString %}"> RSS </a>
+		  </span>
         </p>
 	  </div>
       <br>
 	  <!-- bread crumbs end -->
 	
-	  <div class="well well-small">
-		<p class="options pull-right"><span class="feed first-item"><a href="{% url 'dinette_feed_url' category.getCategoryString %}"> RSS </a></span></p>	
-        <span class='pull-left'><strong>Topics </strong> </span>
-	  </div>
+	<table class="table">
+		<thead>
+			<tr>
+				<th class="col-md-6">Topics</th>
+				<th class="col-md-1">Replies</th>
+				<th class="col-md-1">Views</th>
+				<th class="col-md-4">Last Post</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for topic in topic_list %}   
+			<tr class="{%if topic.is_closed %}warning{% endif %}">
+				<td>
+					{% if topic.is_closed %}
+						<strong>(Closed)</strong>
+					  {% endif %}
+					  
+					  {% if topic.is_sticky %}
+						<strong>(Sticky)</strong>
+					  {% endif %}		
+					  <a href="{% url 'dinette_topic_detail' topic.category.slug topic.slug %}">{{topic.subject}} </a>   
 
-      <div class='well well-small'>
-          <div>
-            <span class='smallspan'>&nbsp;</span>
-            <span class='span6'>Topics</span>
-            <span class='span1'>Replies</span>
-            <span class='span1'>Views</span>
-            <span class='span2'>Last Post</span>
-        </div>
-    </div>
-    
-            <div class="main-content main-forum forum-views well" id='topicslist'>
-                {% for topic in topic_list %}     
-                {% include 'dinette/topic_detail_frag.html' %}  
-                {% endfor %}
-                <div class='clearfix'></div>
-            </div>
-      <!--
-	  <div class="main-subhead">
-		<p class="item-summary forum-views">
-		  <span>
-			<strong class="subject-title">Topics</strong> in this forum with details of 
-			<strong class="info-replies">replies</strong>, 
-			<strong class="info-views">views</strong>, 
-			<strong class="info-lastpost">last post</strong>.
-		  </span>
-		</p>
-	  </div>
-      -->
+					<div class="item-starter">
+						  <cite>
+						      by <a href="{{ topic.posted_by.get_profile.get_absolute_url }}">
+						             {{ topic.posted_by.username }}
+						         </a>
+						  </cite>
+					</div>
+				</td>
+				<td>{{ topic.reply_set.count }}</td>
+				<td>{{ topic.viewcount }}</td>
+				<td>
+				  {% if topic.reply_set.count > 0 %}
+				      <span><a href="{{ topic.lastPost.get_url_with_fragment }}">{{ topic.lastPostDatetime|date:"jS F Y H:i A" }}</a></span>
+				  {% else %}
+				      <span><a href="{{ topic.lastPost.get_absolute_url }}">{{ topic.lastPostDatetime|date:"jS F Y H:i A" }}</a></span>
+				  {% endif %}
+				  <cite>
+				      by <a href="{{ topic.lastPost.posted_by.get_profile.get_absolute_url }}">
+				             {{ topic.lastPost.posted_by.username }}
+				         </a>
+				  </cite>
+				</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	
+	</table>
 
-
-	 
+     
       {% if page_obj.paginator.num_pages > 1 %}
-	  <div  id="belowpostreplybox" class="crumbs gen-content well well-small small pull-left" >
-	  	{% paginate %}	
-	  </div>
-        <div class='clearfix'></div>
+      {% paginate %}	
       {% endif %}
   
 	  <div id="brd-pagepost-end" class="main-pagepost gen-content">

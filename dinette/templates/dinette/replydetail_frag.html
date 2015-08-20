@@ -1,14 +1,15 @@
 {% load url from future %}
-{% load thumbnail %} 
-<div id='post{{ reply.id }}' class='well eachrow'>
+{% load thumbnail %}
+ 
+<tr id='post{{ reply.id }}' class='eachrow'>
 
-  
+ <td class="col-md-4">
   <!-- div.postbody begins-->
   <!--  <div class="postbody"> -->
 	<!-- div.post-author begins-->
     <div class="post-author span3">
 	  <!-- ul.author-indent begins-->
-	  <ul class="author-ident unstyled">
+	  <ul class="author-ident list-unstyled">
 	    <li>
 		    {% if reply.posted_by.get_profile.photo  %}
 		      {% thumbnail reply.posted_by.get_profile.photo "80x80" as profile_photo %}
@@ -35,7 +36,7 @@
 	  <!-- ul.author-indent ends-->
 	  
 	  <!-- ul.author-info begins-->
-	  <ul class="author-info unstyled" >
+	  <ul class="author-info list-unstyled" >
 	    <li>
 		  <span>Registered: 
 		    <strong> {{ reply.posted_by.date_joined|date:"jS F Y H:i A" }}</strong>
@@ -50,7 +51,9 @@
 	  <!-- ul.author-info ends-->
 	</div>
 	<!-- div.post-author ends-->
-
+	</td>
+	<td class="col-md-8">
+	
 	<div class="post-entry span8">
         <!-- div.post/even/replypost begins-->
         <a name="{{ reply.reply_number }}"></a>
@@ -92,33 +95,11 @@
                 </div>
 
         <!-- div.postbody ends-->
-        <!-- {#
-            {% if request.user %}
-                <div class="postfoot ">
-                    <div class="post-options">
-                        <p class="post-actions">
-                            {% if reply.posted_by == request.user or request.user in reply.topic.category.moderated_by.all %}
-                                <span class="delete-post">
-                                    <a href="#" onclick="delete_reply({{ reply.id }}); return false;">Delete</a>
-                                </span>
-                                <span class="edit-post">
-                                    <a href="{% url 'dinette_editreply' reply.id %}">Edit</a>
-                                </span>
-                            {% endif %}
-                            <span class="edit-post first-item">
-                                <a href="#" onclick="quote_reply({{ reply.id }}, '{{ reply.posted_by.username }}'); return false;">Quick quote</a>
-                            </span>
-                        </p>
-                    </div>
-                </div>
-            {% endif %}
-
-            #}
-            -->
+        
 	</div>
-    <div class='clearfix'></div>
+	</td>
 
-  </div>
+  </tr>
   <!-- div.postbody ends-->
   
 

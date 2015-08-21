@@ -3,7 +3,7 @@
 {% load url from future %}
 
 
-{% block title %} Dinette User Profile for {{ user_profile }}{% endblock %}
+{% block title %} Dinette User Profile for {{ dinette_profile.user }}{% endblock %}
 
 {% block content %}
 
@@ -15,7 +15,6 @@
 	{% include 'dinette/announce_frag.html' %}
 	<p></p>
 	
-	<div class="hr"><hr /></div>
 	<div id="errorbox"> <span></span> </div> 
 	
 	<!-- brd-main begin -->
@@ -24,7 +23,7 @@
 	  <div id="brd-crumbs-top" class="crumbs well well-small">
 	    <p>
 		  <span class="crumb crumbfirst">
-			<a href="{% url 'dinette_category' %}">Dinette Forums</a>
+			<a href="{% url 'dinette_category' %}">Forums</a>
 		  </span> 
 		  <span class="crumb crumblast">
 			<span> &raquo; User Profile </span>
@@ -32,55 +31,53 @@
         </p>
 	  </div>
 	  <!-- bread crumbs end -->
-	
-	  <div class="main-head">
-          <div class='well well-small'>User Profile </div>
-	  </div>
 
-	  <div class="main-subhead" style='padding: 10px;'>
+	  <div class="main-subhead">
+	  <table class="table">
+	  	<tr>
+	  		<td class="col-md-5">
 	  <table class="authortable">
 		<tr><td >
-		  {% if user_profile.photo  %}
-			{% thumbnail user_profile.get_profile.photo 80x80 as profile_thumbnail %}
+		  {% if dinette_profile.photo  %}
+			{% thumbnail dinette_profile.photo 80x80 as profile_thumbnail %}
 			<img src="{{ profile_thumbnail.url }}" />
 			{% endthumbnail %}
 		  {% else %}                                                        
-			<img src="http://www.gravatar.com/avatar/{{user_profile.get_profile.getMD5}}.jpg" alt="" />
+			<img src="http://www.gravatar.com/avatar/{{dinette_profile.getMD5}}.jpg" alt="" />
 		  {% endif %}  
 		</td></tr>
 		<tr><td>
-		  <a href="{{ user_profile.get_profile.get_absolute_url }}">{{ user_profile.username|title }}</a> 
-		  {% if user_profile.get_profile.userrank %}
-			({{ user_profile.get_profile.userrank }})
+		  <a href="{{ dinette_profile.get_absolute_url }}">{{ dinette_profile.user.username|title }}</a> 
+		  {% if dinette_profile.userrank %}
+			({{ dinette_profile.userrank }})
 		  {% endif %}
 		</td></tr>
 	  </table>
 	  
-	  {% if user_profile.moderaters.all %}
+	  {% if dinette_profile.user.moderaters.all %}
 		<p>
 	    <b> Moderator of </b>:
-		{% for category in user_profile.moderaters.all %}
+		{% for category in dinette_profile.user.moderaters.all %}
 		  <a href='{{ category.get_absolute_url }}'> {{ category.name }} </a> {% if not forloop.last %}, {% else %}. {% endif %}
 		{% endfor %}
 		</p>
 	  {% endif %}
-	  <p><b> Number of topics posted </b>: {{  user_profile.ftopics_set.count }} </p>
-	  <p><b> Number of replies posted </b>: {{  user_profile.reply_set.count }} </p>
-
-      {% if request.user == user_profile %}
-      <p><b>Settings: </b></p>
-      <br/>
+	  <p><b> Number of topics posted </b>: {{  dinette_profile.user.ftopics_set.count }} </p>
+	  <p><b> Number of replies posted </b>: {{  dinette_profile.user.reply_set.count }} </p>
+		</td>
+		<td class="col-md-7">
+      {% if request.user == dinette_profile.user %}
       <p>Subscriptions</p>
         <ul>
             <li>
             Daily Digest
-		        {% if user_profile.get_profile.is_subscribed_to_digest %}
+		        {% if dinette_profile.is_subscribed_to_digest %}
 		            <a href="{% url 'dinette_unsubscribe_from_digest' %}"><em>Unsubscribe</em></a>
 		        {% else %}
 		            <a href="{% url 'dinette_subscribe_to_digest' %}">Subscribe</a>
 		        {% endif %}
 	        </li>
-	        {% for topic in user_profile.subscribers.all %}
+	        {% for topic in dinette_profile.user.subscribers.all %}
 	            <li>
 	                {{ topic.subject }}
 	                <a href="{% url 'dinette_unsubscribe_from_topic' topic.id %}?next={{ request.path }}"><em>Unsubscribe</em></a>
@@ -88,7 +85,9 @@
 	        {% endfor %}
         </ul>
       {% endif %}
-
+			</td>
+		</tr>
+	</table>
 	  </div>
 
 	  <div id="brd-pagepost-end" class="main-pagepost gen-content">

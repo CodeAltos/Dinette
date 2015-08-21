@@ -11,21 +11,21 @@
 	  <!-- ul.author-indent begins-->
 	  <ul class="author-ident list-unstyled">
 	    <li>
-		    {% if reply.posted_by.get_profile.photo  %}
-		      {% thumbnail reply.posted_by.get_profile.photo "80x80" as profile_photo %}
+		    {% if reply.posted_by.dinette_profile.photo  %}
+		      {% thumbnail reply.posted_by.dinette_profile.photo "80x80" as profile_photo %}
 		      <img src="{{ profile_photo.url }}" />
 		      {% endthumbnail %}
 		    {% else %}                                                        
-		      <img src="http://www.gravatar.com/avatar/{{reply.posted_by.get_profile.getMD5}}.jpg" alt="{{reply.posted_by.username}}'s Photo" />
+		      <img src="http://www.gravatar.com/avatar/{{reply.posted_by.dinette_profile.getMD5}}.jpg" alt="{{reply.posted_by.username}}'s Photo" />
 		    {% endif %} 
         </li>
         <li>
-		    <a href="{{ reply.posted_by.get_profile.get_absolute_url }}">{{reply.posted_by.username}}</a>
+		    <a href="{{ reply.posted_by.dinette_profile.get_absolute_url }}">{{reply.posted_by.username}}</a>
 		</li>
-		<li class="usertitle"><span>{{ reply.posted_by.get_profile.userrank }}  </span></li>
+		<li class="usertitle"><span>{{ reply.posted_by.dinette_profile.userrank }}  </span></li>
 		<li class="userstatus">
 		  <span>
-		  {% if reply.posted_by.get_profile.is_online %}
+		  {% if reply.posted_by.dinette_profile.is_online %}
 			Online
 		  {% else %}
 			Offline
@@ -44,7 +44,7 @@
 		</li>
 		<li>
 		  <span>Posts: 
-		    <strong> {{ reply.posted_by.get_profile.get_total_posts  }}</strong>
+		    <strong> {{ reply.posted_by.dinette_profile.get_total_posts  }}</strong>
 		  </span>
 		</li>
 	  </ul>
@@ -74,8 +74,8 @@
 		  {% endwith %}
 		</div>
         <!-- div.postbody ends-->
-            {% if request.user %}
-                    <div class="post-options">
+            {% if request.user.is_authenticated %}
+                    <div class="post-options pull-right">
                         <p class="post-actions">
                             {% if reply.posted_by == request.user or request.user in reply.topic.category.moderated_by.all %}
                                 <span class="delete-post">

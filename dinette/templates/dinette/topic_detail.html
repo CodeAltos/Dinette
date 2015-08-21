@@ -115,20 +115,20 @@
 			<ul class="author-ident list-unstyled">
 			  <li>
 					{% if topic.posted_by.photo  %}
-					  {% thumbnail topic.posted_by.get_profile.photo "80x80" as profile_thumbnail %}
+					  {% thumbnail topic.posted_by.dinette_profile.photo "80x80" as profile_thumbnail %}
                                           <img src="{{ profile_thumbnail.url }}" />
 					  {% endthumbnail %}
 					{% else %}                                                        
-					  <img src="http://www.gravatar.com/avatar/{{topic.posted_by.get_profile.getMD5}}.jpg" alt="" />
+					  <img src="http://www.gravatar.com/avatar/{{topic.posted_by.dinette_profile.getMD5}}.jpg" alt="" />
 					{% endif %}  
 				</li>
                 <li>
-					<a href="{{ topic.posted_by.get_profile.get_absolute_url }}">{{topic.posted_by.username}}</a>
+					<a href="{{ topic.posted_by.dinette_profile.get_absolute_url }}">{{topic.posted_by.username}}</a>
 			  </li>
                                                 
-			  <li class="usertitle"><span>{{ topic.posted_by.get_profile.userrank }}</span></li>
+			  <li class="usertitle"><span>{{ topic.posted_by.dinette_profile.userrank }}</span></li>
 			  <li class="userstatus"><span>
-			  {% if topic.posted_by.get_profile.is_online %}
+			  {% if topic.posted_by.dinette_profile.is_online %}
 				Online
 			  {% else %}
 				Offline
@@ -137,7 +137,7 @@
 			</ul>
 			<ul class="author-info list-unstyled" >
 			  <li><span>Registered: <strong> {{ topic.posted_by.date_joined|date:"jS F Y H:i A" }}</strong></span></li>
-			  <li><span>Posts: <strong> {{ topic.posted_by.get_profile.get_total_posts  }}</strong></span></li>
+			  <li><span>Posts: <strong> {{ topic.posted_by.dinette_profile.get_total_posts  }}</strong></span></li>
 			</ul>
 		  </div>
 		  <!-- author details ends -->

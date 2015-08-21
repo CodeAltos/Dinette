@@ -187,7 +187,7 @@ def postReply(request):
 
 
     reply = freply.save(commit=False)
-     #only if there is any file
+    #only if there is any file
     if len(request.FILES.keys()) == 1 :
         if(request.FILES['file'].content_type.find("image") >= 0 ) :
             reply.attachment_type = "image"
@@ -368,7 +368,7 @@ def logout(request):
     return auth_logout(request)
 
 def user_profile(request, slug):
-    user_profile = get_object_or_404(User, dinetteuserprofile__slug=slug)
+    user_profile = get_object_or_404(User, dinette_profile__slug=slug)
     return render_to_response('dinette/user_profile.html', {}, RequestContext(request, {'user_profile': user_profile}))
 
 @login_required

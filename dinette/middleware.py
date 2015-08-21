@@ -9,7 +9,7 @@ class UserActivity:
             #last = req.user.get_profile().last_activity
             try:
                 try:
-                    user_profile = req.user.dinetteuserprofile
+                    user_profile = req.user.dinette_profile
                 except DinetteUserProfile.DoesNotExist:
                     now = datetime.datetime.now()
                     user_profile, created = DinetteUserProfile.objects.get_or_create(user = req.user, last_activity = now, last_session_activity = now)

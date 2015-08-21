@@ -274,7 +274,7 @@ class Reply(models.Model):
         
         
 class DinetteUserProfile(models.Model):
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User, related_name='dinette_profile')
     last_activity = models.DateTimeField(auto_now_add=True)
     #When was the last session. Used in page activity since last session.
     last_session_activity = models.DateTimeField(auto_now_add=True)
@@ -306,7 +306,6 @@ class DinetteUserProfile(models.Model):
         return self.user.ftopics_set.count() + self.user.reply_set.count()
     
     def is_online(self):
-        from django.conf import settings
         last_online_duration = getattr(settings, 'LAST_ONLINE_DURATION', 900)
         now = datetime.datetime.now()
         if (now - self.last_activity).seconds < last_online_duration:

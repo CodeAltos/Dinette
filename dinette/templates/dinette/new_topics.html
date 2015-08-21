@@ -11,50 +11,28 @@
 	  	<div id="brd-index" class="brd-page basic-page">
 		{% include 'dinette/header_frag.html' %}
 		{% include 'dinette/announce_frag.html' %}
-		<p></p>
 		</div>
         <div class='well well-small'>{{ page_message }}</div>
 	</div>
 	
+	<table class="table">
+		<thead>
+			<tr>
+				<th class="col-md-6">Topics</th>
+				<th class="col-md-1">Replies</th>
+				<th class="col-md-1">Views</th>
+				<th class="col-md-4">Last Post</th>
+			</tr>
+		</thead>
+		<tbody id="topicslist">
+			{% for topic in new_topic_list %}   
+			{% include 'dinette/topic_detail_frag.html' %}
+			{% empty %}
+              <tr><td>There is no topic with new replies since your last visit.</td></tr>
+             {% endfor %}
+		</tbody>
 	
-	
-	<div id="topicslist" class="main-content main-forum forum-views">
-		<div id="brd-wrap" class="brd">
-  			<div id="brd-index" class="brd-page basic-page">
-  			    <!--
-  				<div class="main-subhead">
-					<p class="item-summary forum-views">
-					  <span>
-						<strong class="subject-title">Topics</strong> in this forum with details of 
-						<strong class="info-replies">replies</strong>, 
-						<strong class="info-views">views</strong>, 
-						<strong class="info-lastpost">last post</strong>.
-					  </span>
-					</p>
-				  </div>
-                  -->
-                  <div class='well well-small'>
-                        <span class='span6'>Topics</span>
-                        <span class='span1'>Replies</span>
-                        <span class='span1'>Views</span>
-                        <span class='span2'>Last Post</span>
-                    </div>
-                    <div class='well'>
-                            {% for topic in new_topic_list %}
-                                {% include "dinette/topic_detail_frag.html" %}
-                            <div class='clearfix'></div>
-                            {% empty %}
-                                <p>There is no topic with new replies since your last visit.</p>
-                            {% endfor %}
-                        </div>
-
-
-                  </table>
-
-			</div>
-		</div>
-	</div>
-			
+	</table>
 
 
 {% endblock content %}

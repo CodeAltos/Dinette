@@ -116,13 +116,13 @@ def postTopic(request):
         return HttpResponse(json_data, content_type=json_mimetype)
 
     #code which checks for flood control
-    if (datetime.now()-request.user.dinetteuserprofile.last_posttime).seconds < settings.FLOOD_TIME:
+    if (datetime.now()-request.user.dinette_profile.last_posttime).seconds < settings.FLOOD_TIME:
     #oh....... user trying to flood us Stop him
         d2 = {"is_valid": "flood", "errormessage": "Flood control.................."}
-        if request.FILES:
-            json_data = "<textarea>"+json.dumps(d2)+"</textarea>"
-        else :
-            json_data = json.dumps(d2)
+#         if request.FILES:
+#             json_data = "<textarea>"+json.dumps(d2)+"</textarea>"
+#         else :
+        json_data = json.dumps(d2)
         return HttpResponse(json_data, content_type = json_mimetype)
 
     ftopic = topic.save(commit=False)
@@ -176,7 +176,7 @@ def postReply(request):
 
 
     #code which checks for flood control
-    if (datetime.now() -(request.user.dinetteuserprofile.last_posttime)).seconds <= settings.FLOOD_TIME:
+    if (datetime.now() -(request.user.dinette_profile.last_posttime)).seconds <= settings.FLOOD_TIME:
     #oh....... user trying to flood us Stop him
         d2 = {"is_valid":"flood","errormessage":"You have posted message too recently. Please wait a while before trying again."}
         if request.FILES :
@@ -210,11 +210,11 @@ def postReply(request):
 
     d2 = {"is_valid":"true","response_html":response_html}
 
-    if request.FILES :
-        #this the required for ajax file uploads
-        json_data = "<textarea>"+json.dumps(d2)+"</textarea>"
-    else:
-        json_data = json.dumps(d2)
+#     if request.FILES :
+#         #this the required for ajax file uploads
+#         json_data = "<textarea>"+json.dumps(d2)+"</textarea>"
+#     else:
+    json_data = json.dumps(d2)
 
     return HttpResponse(json_data, content_type=json_mimetype)
 
@@ -297,8 +297,8 @@ class LatestRepliesOfTopic(Feed):
             list.append(obj)
         return list
 
-     #construct these links by means of reverse lookup  by
-     #using permalink decorator
+    #construct these links by means of reverse lookup  by
+    #using permalink decorator
     def item_link(self,obj):
         return  obj.get_absolute_url()
 
@@ -316,7 +316,7 @@ def assignUserElements(user):
             if totalposts == el[0]:
                 rank = el[1]
         if rank:
-            userprofile = user.dinetteuserprofile
+            userprofile = user.dinette_profile
             userprofile.userrank = rank
             #this is the time when user posted his last post
             userprofile.last_posttime = datetime.now()
@@ -368,12 +368,13 @@ def logout(request):
     return auth_logout(request)
 
 def user_profile(request, slug):
-    user_profile = get_object_or_404(User, dinette_profile__slug=slug)
-    return render_to_response('dinette/user_profile.html', {}, RequestContext(request, {'user_profile': user_profile}))
+    dinette_profile = get_object_or_404(DinetteUserProfile, slug=slug)
+    return render_to_response('dinette/user_profile.html', {},
+                              RequestContext(request, {'dinette_profile': dinette_profile}))
 
 @login_required
 def new_topics(request):
-    userprofile = request.user.dinetteuserprofile
+    userprofile = request.user.dinette_profile
     new_topic_list = userprofile.get_since_last_visit()
     return topic_list(request, new_topic_list, page_message = "Topics since your last visit")
 
@@ -414,17 +415,17 @@ def unsubscribeTopic(request, topic_id):
 @login_required
 def subscribeDigest(request):
     user = get_object_or_404(User, pk=request.user.id)
-    profile = user.dinetteuserprofile
+    profile = user.dinette_profile
     profile.is_subscribed_to_digest = True
     profile.save()
-    next = request.GET.get('next', user.dinetteuserprofile.get_absolute_url())
+    next = request.GET.get('next', user.dinette_profile.get_absolute_url())
     return redirect(next)
 
 @login_required
 def unsubscribeDigest(request):
     user = get_object_or_404(User, pk=request.user.id)
-    profile = user.dinetteuserprofile
+    profile = user.dinette_profile
     profile.is_subscribed_to_digest = False
     profile.save()
-    next = request.GET.get('next', user.dinetteuserprofile.get_absolute_url())
+    next = request.GET.get('next', user.dinette_profile.get_absolute_url())
     return redirect(next)

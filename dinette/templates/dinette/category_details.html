@@ -124,7 +124,8 @@
 	         }
 	           
 	        if ( $("#fposttopic").length > 0 ){
-	            $('#fposttopic').clearForm();        
+	           // $('#fposttopic').clearForm(); 
+	            $('#fposttopic textarea#id_message').val('');            
 	            $(':input:visible:enabled:first','#fposttopic').focus();
 	            return false;
 	        }

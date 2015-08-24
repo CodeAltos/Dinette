@@ -4,7 +4,8 @@ var $ = jq110;
 
 function intialize() {
     if ( $("#fposttopic").length > 0 ) {
-        $('#fposttopic').clearForm();
+        //$('#fposttopic').clearForm();
+        $('#fposttopic textarea#id_message').val('');
         $('#fposttopic').ajaxForm( {
             // dataType identifies the expected content type of the server response 
             dataType:  'json',       
@@ -15,7 +16,8 @@ function intialize() {
     }
     
     if ( $("#fpostreply").length > 0 ) {
-        $('#fpostreply').clearForm();
+        //$('#fpostreply').clearForm();
+        $('#fpostreply textarea#id_message').val('');
         $('#fpostreply').ajaxForm({
             // dataType identifies the expected content type of the server response 
             dataType:  'json',              
@@ -150,13 +152,15 @@ function isUserAuthenticated( k )
          }
          
         if ( $("#fposttopic").length > 0 ){
-            $('#fposttopic').clearForm();        
+            //$('#fposttopic').clearForm();
+            $('#fposttopic textarea#id_message').val('');       
             $(':input:visible:enabled:first','#fposttopic').focus();
             return false;
         }
            
         if( $("#fpostreply").length > 0 )  {
-            $('#fpostreply').clearForm();
+            //$('#fpostreply').clearForm();
+            $('#fpostreply textarea#id_message').val('');
             $(':input:visible:enabled:first','#fpostreply').focus();
             return false;
         }

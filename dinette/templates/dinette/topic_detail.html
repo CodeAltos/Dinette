@@ -37,7 +37,7 @@
   <div id="brd-crumbs-top" class="crumbs well well-small">
     <p>
 	  <span class="crumb crumbfirst">
-	    <a href="{% url 'dinette_category' %}">{% get_site_name %}</a>
+	    <a href="{% url 'dinette_category' %}">Forum</a>
 	  </span> 
 	  <span class="crumb">
 		<span> &raquo; </span>
@@ -251,7 +251,8 @@
 	         }
 	           
 	        if( $("#fpostreply").length > 0 )  {
-	            $('#fpostreply').clearForm();
+	            //$('#fpostreply').clearForm();
+	            $('#fpostreply textarea#id_message').val('');
 	            $(':input:visible:enabled:first','#fpostreply').focus();
 	            return false;
 	        }
